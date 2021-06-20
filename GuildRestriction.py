@@ -535,8 +535,32 @@ class GuildRestriction(object):
         if len(message_content) == 0:
             return False, False #TODO, this means all empty messages are not okay, see line #405
 
+        
         if message_content in self.whitelists[slot_triggered]:
             return False, True
+        else:
+            #TODO: Add number support
+            #There are two possible ways to do this. The following way may seem easiest, but it has a bug:
+            #message_content = replace_continuous_numbers(message_content, replacement_text="%%number")
+            #if message_content in self.whitelists[slot_triggered]:
+            #   return False, True
+            
+            #The bug is a scenario where the term in the allowed list is: ?quickedit 1 %%number %%number and the message is "?quickedit 1 2 3"
+            #Line 539 doesn't succeed because the term contains %%number, and that's okay. But line 544 also fails because we get back "?quickedit %%number %%number %%number"
+            #which fails to match.
+            
+            #What is the solution? Perhaps we do not allow wild card numbers in to be in the same term as normal numbers. But this limits the user's possibilities for matching, which isn't ideal.
+            
+            #We also want to avoid putting user input directly into a regex pattern. The reasons for this are beyond the scope of these comments.
+            
+            #It appears, then, we'll have to iterate through the whitelist terms, add all that have wild cards to a list, then for each of those terms,
+            #carefully iterate over the user input and check if it matches. This is unfortunately the only solution that comes to mind,
+            #which is less than ideal since every check thus-far is O(1) lookup (hashing). We open ourselves up to very large lookup times if there are many terms with wild cards
+            #with this solution, and/or if this user's message is very long.
+            
+            #Brainstorm for alternative solutions...?
+  
+            pass
         return False, False
             
     
