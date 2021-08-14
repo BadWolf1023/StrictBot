@@ -1,0 +1,14 @@
+
+*.pkl
+.pydevproject
+.project
+*.pyc
+backups/2021-08-14/restricted_data.pkl_7
+backups/2021-08-14/restricted_data.pkl_6
+backups/2021-08-14/restricted_data.pkl_5
+backups/2021-08-14/restricted_data.pkl_4
+backups/2021-08-14/restricted_data.pkl_3
+backups/2021-08-14/restricted_data.pkl_2
+backups/2021-08-14/restricted_data.pkl_1
+backups/2021-08-14/restricted_data.pkl_0
+private.txt

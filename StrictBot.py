@@ -55,6 +55,12 @@ async def on_message(message: discord.Message):
     if message.author.id == 706120725882470460 and message.content == "!debug":
         await badwolf_debug(message)
         return
+    if message.author.id == 706120725882470460 and message.content == "!addtablebotterms":
+        old_len = len(restriction_data[message.guild.id].whitelists[0])
+        await add_all_tablebot_terms(restriction_data[message.guild.id].whitelists[0])
+        new_len = len(restriction_data[message.guild.id].whitelists[0])
+        await message.channel.send(f"Done. Added {new_len - old_len} terms.")
+        return
     if restriction_data == None:
         return
     if message.author.bot:
@@ -109,6 +115,48 @@ async def badwolf_debug(message):
             
     Shared.log_event(to_send)
     await Shared.safe_send(message, to_send)
+    
+async def add_all_tablebot_terms(the_set):
+    zero_arg_commands = ["?reset", "?undo", "?races", "?vr", "?wws", "?ctwws", "?mii", "?battles", "?fc", "?allplayers", "?ap", "?fcs", "?rxx", "?races", "?tt", "?wp", "?dcs"]
+    for cur_command in zero_arg_commands:
+        the_set.add(cur_command)
+        
+    one_arg_commands = [("?theme", range(1, 12)),
+                        ("?graph", range(1, 3)),
+                        ("?earlydc", range(1, 4)),
+                        ("?size", range(1, 13)),
+                        ("?removerace", range(1, 13)),
+                        ("?rr", range(1, 13)),
+                        ("?sw", ["FFA 12", "2v2 6", "3v3 4", "4v4 3", "6v6 2"])]
+    for command_pack in one_arg_commands:
+        the_set.add(command_pack[0])
+        cur_command = command_pack[0]
+        for x in command_pack[1]:
+            the_set.add(f"{command_pack[0]} {x}")
+    
+    two_arg_commands = [("?changeroomsize", range(1, 13), range(1, 13)),
+                        ("?penalty", range(1, 14), range(-20, 21)),
+                        ("?dc", range(1, 12), ["on", "before"]),
+                        ("?changetag", range(1,14), [c for c in "ABCDEFGHIJKLMNOPQRSTUVWXYZ"]),
+                        ("?changeroomsize", range(1, 13), range(1, 13))]
+    for command_pack in two_arg_commands:
+        the_set.add(command_pack[0])
+        cur_command = command_pack[0]
+        for x in command_pack[1]:
+            for y in command_pack[2]:
+                the_set.add(f"{command_pack[0]} {x} {y}")
+                            
+    
+    three_arg_commands = [("?quickedit", range(1, 14),  range(1, 13),  range(1, 13)),
+                          ("?edit", range(1, 14),  range(1, 13),  range(0, 61))]
+    for command_pack in three_arg_commands:
+        the_set.add(command_pack[0])
+        cur_command = command_pack[0]
+        for x in command_pack[1]:
+            for y in command_pack[2]:
+                for z in command_pack[3]:
+                    the_set.add(f"{command_pack[0]} {x} {y} {z}")
+    
 
 
 @tasks.loop(seconds=20)

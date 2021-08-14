@@ -12,6 +12,13 @@ from typing import Set
 import traceback
 
 prefix = "!"
+MKW_LOUNGE_SERVER_ID = 387347467332485122
+
+def get_max_term_limit(server_id):
+    if server_id == MKW_LOUNGE_SERVER_ID:
+        return 15000
+    else:
+        return 2000
 
 
 backup_folder = "backups/"

@@ -276,8 +276,9 @@ class GuildRestriction(object):
                     if ending == "":
                         await Shared.safe_send(message, "Provide a term to add.")
                     else:
-                        if len(self.whitelists[0]) >= 2000:
-                            await Shared.safe_send(message, "You already have 2000 terms added. This is the maximum amount of terms you can whitelist for server wide settings.")
+                        max_term_limit = Shared.get_max_term_limit(message.guild.id)
+                        if len(self.whitelists[0]) >= max_term_limit:
+                            await Shared.safe_send(message, f"You already have {max_term_limit} terms added. This is the maximum amount of terms you can whitelist for server wide settings.")
                         elif len(ending) > 200:
                             await Shared.safe_send(message, "Whitelisted terms cannot be more than 200 characters long.")
                         else:
