@@ -118,7 +118,7 @@ async def safe_send_file(message:discord.Message, content):
     try:
         await message.channel.send(content="My message was too long, so I've attached it as a txt file instead.", file=txt_file)
     except discord.errors.Forbidden:
-        safe_send_missing_permissions(message)
+        await safe_send_missing_permissions(message)
     finally:
         if os.path.exists(file_path):
             os.remove(file_path)
